@@ -52,7 +52,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: "${APPLICATION_NAME}:latest"
+        name: "${APPLICATION_NAME}:${TARGET_ENVIRONMENT}"
     postCommit: {}
     resources: {}
     runPolicy: Serial
@@ -60,11 +60,7 @@ objects:
       binary: {}
       type: Binary
     strategy:
-      dockerStrategy:
-        from:
-          kind: ImageStreamTag
-          name: ${NIFI_BASE_IMAGE}
-          namespace: ${IMAGE_STREAM_NAMESPACE}
+      dockerStrategy: {}        
     triggers: {}
 - kind: DeploymentConfig
   apiVersion: v1
@@ -134,13 +130,8 @@ parameters:
   description: "Environment in which the application is to be deployed (DEV, SIT, UAT, PRO)."
   value: "dev"
   required: true
-- name: NIFI_BASE_IMAGE
-  description: "Base image to use"
-  value: "nifi-ocp:latest"
-  required: true
 - name: IMAGE_STREAM_NAMESPACE
   description: "Namespace in which the ImageStreams are installed."
-  value: "openshift"
   required: true
 - name: CPU_REQUEST
   description: "Minimum amount of CPU that the container may consume. Unit (m) has to be included."
