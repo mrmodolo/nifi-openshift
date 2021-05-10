@@ -20,7 +20,7 @@ ADD sh/ ${NIFI_BASE_DIR}/scripts/
 # Setup NiFi user and create necessary directories
 RUN mkdir -p ${NIFI_BASE_DIR} \
     && apt-get update \
-    && apt-get install -y jq xmlstarlet procps
+    && apt-get install -y jq xmlstarlet procps rsync
 
 # Download, validate, and expand Apache NiFi Toolkit binary.
 RUN curl -fSL ${MIRROR_BASE_URL}/${NIFI_TOOLKIT_BINARY_PATH} -o ${NIFI_BASE_DIR}/nifi-toolkit-${NIFI_VERSION}-bin.zip \
@@ -54,6 +54,7 @@ ADD bootstrap.conf ${NIFI_HOME}/conf/bootstrap.conf
 RUN echo "#!/bin/sh\n" > ${NIFI_HOME}/bin/nifi-env.sh
 
 RUN chmod -R g+rwX ${NIFI_BASE_DIR}/scripts && chmod +x ${NIFI_BASE_DIR}/scripts/*
+RUN mkdir /var/nifi && chmod -R g+rwX /var/nifi
 
 # Web HTTP(s) & Socket Site-to-Site Ports
 EXPOSE 8080 8443 10000
