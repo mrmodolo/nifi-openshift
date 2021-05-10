@@ -53,6 +53,8 @@ ADD bootstrap.conf ${NIFI_HOME}/conf/bootstrap.conf
 # Clear nifi-env.sh in favour of configuring all environment variables in the Dockerfile
 RUN echo "#!/bin/sh\n" > ${NIFI_HOME}/bin/nifi-env.sh
 
+RUN chmod -R g+rwX ${NIFI_BASE_DIR}/scripts && chmod +x ${NIFI_BASE_DIR}/scripts/*
+
 # Web HTTP(s) & Socket Site-to-Site Ports
 EXPOSE 8080 8443 10000
 
@@ -69,4 +71,4 @@ USER 1001
 # Also we need to use relative path, because the exec form does not invoke a command shell,
 # thus normal shell processing does not happen:
 # https://docs.docker.com/engine/reference/builder/#exec-form-entrypoint-example
-ENTRYPOINT ["../scripts/start.sh"]
+ENTRYPOINT ["/opt/nifi/scripts/start.sh"]
